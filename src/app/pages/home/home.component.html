@@ -1,3 +1,33 @@
-<h2>Olympic games app</h2>
+<h1>Dasboard</h1>
 <hr />
-<p>{{ (olympics$ | async)?.length }} data loaded</p>
+
+<p>
+    Bienvenue sur votre dashboard interactif des 
+    Jeux Olympiques ! Plongez au cœur des exploits 
+    des athlètes et des nations avec notre tableau de 
+    bord simple et intuitif. Découvrez facilement le 
+    nombre de médailles remportées par chaque pays lors 
+    des éditions passées des Jeux Olympiques, et 
+    suivez l’évolution de leurs performances au fil 
+    des années. 
+    Pensée pour vous accompagner partout, 
+    que ce soit sur ordinateur ou sur mobile, 
+    cette application vous invite à explorer les données
+    sportives d’une manière ludique et immersive,
+    en parfaite harmonie avec les reportages passionnants
+    de TéléSport.
+</p>
+
+
+<h2>Medals per Country</h2>
+
+<p><strong>Numbers Of JOs</strong> {{ nombreDeJO }}  | <strong>Numbers Of Countrys</strong> {{ nombreDePays }}</p>
+
+<div style="display: block; width: 400px;">
+    <canvas baseChart
+            [data]="pieChartData"
+            [type]="pieChartType"
+            [options]="pieChartOptions"
+            [plugins]="[ChartDataLabels]">
+    </canvas>
+</div>
