@@ -1,0 +1,25 @@
+
+
+.graphique-ligne{
+    
+  max-width: 600px;   /* ou une largeur fixe, ex: 500px */
+  max-height: 300px;  /* ou la hauteur que tu souhaites */
+  width: 100% !important;        /* pour que ça reste responsive */
+  height: auto;
+
+}
+
+button {
+  margin: 10px;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}

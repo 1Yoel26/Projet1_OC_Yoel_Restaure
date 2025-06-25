@@ -1,0 +1,26 @@
+<p>{{infoEtat}}</p>
+
+<div *ngIf="countryData">
+  
+  <h2>{{ countryData.country }}</h2>
+  <hr />
+
+  <p><strong>Nombre de participations :</strong> {{ totalParticipations }} |
+  <strong>Total de médailles :</strong> {{ totalMedals }}  |
+  <strong>Total d'athlètes :</strong> {{ totalAthletes }}</p>
+
+
+  <!-- Graphique ligne -->
+  <canvas class="graphique-ligne" 
+    baseChart
+    [data]="barChartData"
+    [options]="barChartOptions"
+    [type]="barChartType">
+  </canvas>
+
+  <br><br>
+
+  <button routerLink="/">Retour à la page d'accueil</button>
+
+
+</div>
