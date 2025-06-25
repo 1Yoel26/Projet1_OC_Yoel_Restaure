@@ -7,11 +7,18 @@ body {
     
 }
 
-canvas{
+@media(min-width: 1024px){
+
+  canvas{
   
   width: 30%;
   margin: 5% auto; /* Centrage horizontal + espacement */
+
 }
+
+}
+
+
 
 
 
