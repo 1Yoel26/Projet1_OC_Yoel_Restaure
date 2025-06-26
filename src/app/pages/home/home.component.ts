@@ -5,10 +5,24 @@
   import { Chart } from 'chart.js';
   import { Router } from '@angular/router';
   import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
+  import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 
   // enregistrement du plugin pour afficher les nom des pays 
   // directement sur les parts du graphique
   Chart.register(ChartDataLabels);
+
+  // création de l'interface qui va contenir toutes les données que 
+  // j'ai besoin afin, de typer mon observable 
+    interface statistiquesJO{
+        nbJo: number;
+        /*tabNomDesPays: string[];
+        infoPourGraphique:{
+          nomDuPays: string[];
+          idDuPays: number;
+          nbDeMedailles: number[];
+        } */
+    }
+
 
   @Component({
     selector: 'app-home',
@@ -18,8 +32,17 @@
 
   export class HomeComponent implements OnInit {
 
-    nombreDeJO: number = 0;
-    nombreDePays: number = 0;
+    infoEtat: string = "";
+
+
+    // création de l'observable qui va reçevoir toutes les données des JO
+    observableContenuJO$!: Observable<Olympic[] | null>;
+
+    observableInfoPratiqueJO!: Observable<statistiquesJO | null>;
+
+    // création du constructeur pour injecter automatiquement 
+    // le service OlympicService
+    constructor(private serviceOlympic: OlympicService){}
 
     // Pour indiquer le type de graphique dans le Html
     typeGraphique: ChartType = "pie";
@@ -27,11 +50,47 @@
     contenuGraphique: ChartData<"pie"> = {
 
       // noms associés au part du graphique pie
-      labels: ["France", "Italie", "Angleterre"],
+      labels: ["fr", "AN"],
 
       // proportion de chaque part du graphique pour chaque pays
-      datasets: [{data: [20, 45, 35]}]
+      datasets: [{data: [10, 90]}]
+    
     };
+
+    
+    ngOnInit(): void {
+
+      // appel de la fonction load pour charger les données dans l'Observable
+      this.serviceOlympic.loadInitialData().subscribe({
+
+        next: () => {
+          this.infoEtat = "Données en cours de chargement ...";
+        },
+
+        error: () => {
+          this.infoEtat = "Erreur lors du chargement des données";
+        }
+      });
+      
+
+      // appel de la fonction get pour recuperer l'observable du service avec 
+      // ses données chargés, puis affecter son contenu à observableContenuJO$.
+      this.observableContenuJO$ = this.serviceOlympic.getOlympics();
+      
+
+      // Création de l'observable qui va contenir toutes les
+      // données que j'ai besoin
+
+      this.observableInfoPratiqueJO = this.observableContenuJO$.pipe(
+        map(
+          () => ({nbJo: 150})
+        )
+      );
+
+
+
+    }
+
 
 
     // ajout des noms des pays sur les parts du graphique 
@@ -52,10 +111,5 @@
     };
 
     
-    
-  
 
-    ngOnInit(): void {
-
-    }
      }
