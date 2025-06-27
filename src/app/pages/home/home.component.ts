@@ -14,13 +14,12 @@
   // création de l'interface qui va contenir toutes les données que 
   // j'ai besoin afin, de typer mon observable 
     interface statistiquesJO{
-        nbJo: number;
-        /*tabNomDesPays: string[];
-        infoPourGraphique:{
-          nomDuPays: string[];
-          idDuPays: number;
-          nbDeMedailles: number[];
-        } */
+        nbDeJo: number;
+        tabNomDesPays: string[];
+        nbDePays: number;
+        dicoPaysEtNbDeMedailles: { pays: string; nbMedail: number}[];
+        //dicoPaysEtId: { pays: string; id: number}[];
+        
     }
 
 
@@ -83,9 +82,75 @@
 
       this.observableInfoPratiqueJO = this.observableContenuJO$.pipe(
         map(
-          () => ({nbJo: 150})
+          (dataJo) => {
+
+            // si aucune données dans dataJO
+            if(!dataJo){
+
+              this.infoEtat = "Aucune données Olympic trouvés.";
+
+              return {
+                nbDeJo: 0,
+                tabNomDesPays: [],
+                nbDePays: 0,
+                dicoPaysEtNbDeMedailles: []
+                
+              };
+            }
+
+            // Sinon, si il ya des données dans dataJO
+
+            // programme 1 pour récuperer le nb de JO en recuperant le nombre d'anné unique:
+            let nbJo: number = 0;
+
+            let tabToutesLesAnnees: number[] = [];
+
+            let tabParticipations = dataJo.map(obj => obj.participations);
+
+            let tabParticipationsApplati = tabParticipations.flat();
+
+            tabToutesLesAnnees = tabParticipationsApplati.map(o => o.year);
+
+            let tabToutesLesAnneesUnique = Array.from(new Set(tabToutesLesAnnees));
+
+            nbJo = tabToutesLesAnneesUnique.length;
+
+
+
+            // programme 2 pour récuperer dynamiquement la liste 
+            // de tous les pays, et le nombre total de pays :
+
+            let tabNomDesPays: string[] = [];
+
+            tabNomDesPays = dataJo.map(obj => obj.country);
+
+            let nbPays: number = tabNomDesPays.length;
+
+
+            // programme 3 pour faire le dico qui contiendra 
+            // le nombre total de médailles par pays pour le graphique
+            
+          
+
+            
+
+
+
+            return {
+              nbDeJo : nbJo,
+              tabNomDesPays: tabNomDesPays,
+              nbDePays: nbPays,
+              dicoPaysEtNbDeMedailles: []
+            };
+
+          }
         )
-      );
+      ); // fin de l'observable observableInfoPratiqueJO
+
+      // test si l'observable affiche qq chose
+      this.observableInfoPratiqueJO.subscribe(()=> {
+        console.log("test")
+      });
 
 
 
