@@ -17,7 +17,7 @@
         nbDeJo: number;
         tabNomDesPays: string[];
         nbDePays: number;
-        dicoPaysEtNbDeMedailles: { pays: string; nbMedail: number}[];
+        tabNbTotalDeMedaillesParPays: number[];
         //dicoPaysEtId: { pays: string; id: number}[];
         
     }
@@ -41,7 +41,8 @@
 
     // création du constructeur pour injecter automatiquement 
     // le service OlympicService
-    constructor(private serviceOlympic: OlympicService){}
+    constructor(
+      private serviceOlympic: OlympicService){}
 
     // Pour indiquer le type de graphique dans le Html
     typeGraphique: ChartType = "pie";
@@ -93,7 +94,7 @@
                 nbDeJo: 0,
                 tabNomDesPays: [],
                 nbDePays: 0,
-                dicoPaysEtNbDeMedailles: []
+                tabNbTotalDeMedaillesParPays: []
                 
               };
             }
@@ -130,17 +131,40 @@
             // programme 3 pour faire le dico qui contiendra 
             // le nombre total de médailles par pays pour le graphique
             
-          
-
+            let tabNbTotalDeMedaillesParPays: number[] = [];
+           
             
+            for(let infoJOParPays of dataJo){
 
+              let infoParticipationParPays = infoJOParPays.participations;
+
+              let tableauDesMedaillesParPays: number[] = [];
+
+              for(let infoParParticipation of infoParticipationParPays){
+                
+                tableauDesMedaillesParPays.push(infoParParticipation.medalsCount);
+              
+              }
+
+              let totalDeMedailsParPays: number = 0;
+
+              totalDeMedailsParPays = tableauDesMedaillesParPays.reduce(
+                (accumulateur, valeurAajouter) => 
+                  accumulateur + valeurAajouter, 0
+                
+              );
+
+              tabNbTotalDeMedaillesParPays.push(totalDeMedailsParPays);
+
+              
+            }
 
 
             return {
               nbDeJo : nbJo,
               tabNomDesPays: tabNomDesPays,
               nbDePays: nbPays,
-              dicoPaysEtNbDeMedailles: []
+              tabNbTotalDeMedaillesParPays: tabNbTotalDeMedaillesParPays
             };
 
           }
@@ -148,8 +172,21 @@
       ); // fin de l'observable observableInfoPratiqueJO
 
       // test si l'observable affiche qq chose
-      this.observableInfoPratiqueJO.subscribe(()=> {
-        console.log("test")
+      this.observableInfoPratiqueJO.subscribe((infoPratiqueJO)=> {
+
+        // si cette observable contient bien des données :
+        if(infoPratiqueJO){
+
+          this.contenuGraphique = {
+          labels: infoPratiqueJO.tabNomDesPays,
+          datasets: [{data: infoPratiqueJO.tabNbTotalDeMedaillesParPays}]
+        
+        };
+
+
+        }
+        
+        
       });
 
 
