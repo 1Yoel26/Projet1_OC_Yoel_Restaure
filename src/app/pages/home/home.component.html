@@ -11,15 +11,22 @@
 
 <h2>Medals per Country</h2>
 
-<p><strong>Numbers Of JOs</strong>   | <strong>Numbers Of Countrys</strong> </p>
+<div *ngIf="observableInfoPratiqueJO$ | async as infoJO">
+
+    <p><strong>Numbers Of JOs {{infoJO.nbDeJo}}</strong>   | <strong>Numbers Of Countrys {{infoJO.nbDePays}} </strong> </p>
+
+
+</div>
 
 <div>
     <canvas 
+    #graphiqueAccueil
     baseChart
     [type]="typeGraphique"
     [data]="contenuGraphique"
     [options]="pluginDataLabel"
-    [plugins]="[ChartDataLabels]" >
+    [plugins]="[ChartDataLabels]"
+    (chartClick)="fonctionRedirection($event)" >
         
     </canvas>
 </div>

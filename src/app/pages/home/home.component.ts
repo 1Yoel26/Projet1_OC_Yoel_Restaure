@@ -1,11 +1,11 @@
   import { Component, OnInit } from '@angular/core';
-  import { ChartData, ChartType, plugins } from 'chart.js';
+  import { ActiveElement, ChartData, ChartEvent, ChartType, elements, plugins } from 'chart.js';
   import { OlympicService } from 'src/app/core/services/olympic.service';
   import { Olympic } from 'src/app/core/models/Olympic';
   import { Chart } from 'chart.js';
   import { Router } from '@angular/router';
   import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
-  import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+  import { BehaviorSubject, map, Observable } from 'rxjs';
 
   // enregistrement du plugin pour afficher les nom des pays 
   // directement sur les parts du graphique
@@ -18,8 +18,6 @@
         tabNomDesPays: string[];
         nbDePays: number;
         tabNbTotalDeMedaillesParPays: number[];
-        //dicoPaysEtId: { pays: string; id: number}[];
-        
     }
 
 
@@ -31,18 +29,20 @@
 
   export class HomeComponent implements OnInit {
 
-    infoEtat: string = "";
 
+    infoEtat: string = "";
 
     // création de l'observable qui va reçevoir toutes les données des JO
     observableContenuJO$!: Observable<Olympic[] | null>;
 
-    observableInfoPratiqueJO!: Observable<statistiquesJO | null>;
+    observableInfoPratiqueJO$!: Observable<statistiquesJO | null>;
 
     // création du constructeur pour injecter automatiquement 
     // le service OlympicService
     constructor(
-      private serviceOlympic: OlympicService){}
+      private serviceOlympic: OlympicService,
+      private monRouter: Router
+    ){}
 
     // Pour indiquer le type de graphique dans le Html
     typeGraphique: ChartType = "pie";
@@ -58,17 +58,21 @@
     };
 
     
+    
     ngOnInit(): void {
 
       // appel de la fonction load pour charger les données dans l'Observable
       this.serviceOlympic.loadInitialData().subscribe({
 
         next: () => {
-          this.infoEtat = "Données en cours de chargement ...";
+          this.infoEtat = "";
         },
 
+        // dans le cas ou il ya une erreur uniquement, 
+        // afficher un message d'erreur:
         error: () => {
           this.infoEtat = "Erreur lors du chargement des données";
+          return;
         }
       });
       
@@ -81,7 +85,7 @@
       // Création de l'observable qui va contenir toutes les
       // données que j'ai besoin
 
-      this.observableInfoPratiqueJO = this.observableContenuJO$.pipe(
+      this.observableInfoPratiqueJO$ = this.observableContenuJO$.pipe(
         map(
           (dataJo) => {
 
@@ -172,7 +176,7 @@
       ); // fin de l'observable observableInfoPratiqueJO
 
       // test si l'observable affiche qq chose
-      this.observableInfoPratiqueJO.subscribe((infoPratiqueJO)=> {
+      this.observableInfoPratiqueJO$.subscribe((infoPratiqueJO)=> {
 
         // si cette observable contient bien des données :
         if(infoPratiqueJO){
@@ -184,6 +188,8 @@
         };
 
 
+        
+
         }
         
         
@@ -193,7 +199,29 @@
 
     }
 
+    // ajout de l'évènement clique sur le graphique pour
+    // rediriger vers la page detail/idPays
+    
+    fonctionRedirection(infoClique: {event?: ChartEvent ; active?: any[]} ) {
+      if(infoClique.active && infoClique.active.length > 0){
 
+        // typage de any verifié
+        const ActiveObjet = infoClique.active as ActiveElement[];
+
+        // récuperation de l'index (l'id) de la part
+        // selectionné
+        let indexLabel = ActiveObjet[0].index;
+
+        // on rajoute +1, car le premier id de pays = 1, 
+        // et le premier id de la part du graphique 
+        // selectionné = 0.
+        indexLabel = indexLabel + 1;
+
+        const lienRedirection: string = "/detail/";
+
+        this.monRouter.navigate([lienRedirection, indexLabel]);
+      }
+    }
 
     // ajout des noms des pays sur les parts du graphique 
     // en configurant ce plugin :

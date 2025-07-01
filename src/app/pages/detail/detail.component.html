@@ -1,26 +1,26 @@
-<p>{{infoEtat}}</p>
+<div *ngIf="observableInfoJODuPays$ | async as infoPays">
 
-<div *ngIf="countryData">
-  
-  <h2>{{ countryData.country }}</h2>
-  <hr />
+  <p>{{infoEtat}}</p>
+  <p>{{infoPays.infoEtatObservable}}</p>
+  <p></p>
 
-  <p><strong>Nombre de participations :</strong> {{ totalParticipations }} |
-  <strong>Total de médailles :</strong> {{ totalMedals }}  |
-  <strong>Total d'athlètes :</strong> {{ totalAthletes }}</p>
+  <div >
+    
+    <h2>{{infoPays.nomDuPays}}</h2>
+    <hr />
+
+    <p><strong>Nombre de participations : {{infoPays.nbParticipationsAuJODuPays}}</strong>  |
+    <strong>Total de médailles :</strong>  |
+    <strong>Total d'athlètes :</strong> </p>
 
 
-  <!-- Graphique ligne -->
-  <canvas class="graphique-ligne" 
-    baseChart
-    [data]="barChartData"
-    [options]="barChartOptions"
-    [type]="barChartType">
-  </canvas>
+    <!-- Graphique ligne -->
+    
+    <br><br>
 
-  <br><br>
+    <button routerLink="/">Retour à la page d'accueil</button>
 
-  <button routerLink="/">Retour à la page d'accueil</button>
 
+  </div>
 
 </div>
