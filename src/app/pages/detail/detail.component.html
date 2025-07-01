@@ -2,6 +2,8 @@
 
   <p>{{infoEtat}}</p>
   <p>{{infoPays.infoEtatObservable}}</p>
+  <p>{{infoErreurId}}</p>
+  <p>{{infoEtatGraphique}}</p>
   <p></p>
 
   <div >
@@ -10,12 +12,18 @@
     <hr />
 
     <p><strong>Nombre de participations : {{infoPays.nbParticipationsAuJODuPays}}</strong>  |
-    <strong>Total de médailles :</strong>  |
-    <strong>Total d'athlètes :</strong> </p>
+    <strong>Total de médailles : {{ infoPays.nbTotalDeMedailsDuPays }}</strong>  |
+    <strong>Total d'athlètes : {{ infoPays.nbTotalAthletesDuPays }} </strong> </p>
 
 
     <!-- Graphique ligne -->
-    
+
+    <canvas
+      baseChart
+      [data]="contenuGraphique"
+      [type]="typeGraphique">
+    </canvas>
+      
     <br><br>
 
     <button routerLink="/">Retour à la page d'accueil</button>

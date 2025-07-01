@@ -16,13 +16,13 @@ interface infoUtileJODuPays{
   infoEtatObservable: string;
   nomDuPays: string;
   nbParticipationsAuJODuPays: number;
-  /*nbTotalDeMedailsDuPays: number;
+  nbTotalDeMedailsDuPays: number;
   nbTotalAthletesDuPays: number;
 
   // données pour le graphique 
   tabNbMedailParAnnee: number[];
-  tabAnnéesDeParticipationsAuJO: number[];
-  */
+  tabAnnéesDeParticipationsAuJO: string[];
+  
 
 
 }
@@ -41,6 +41,8 @@ export class DetailComponent implements OnInit {
   // cette variable sert à afficher l'état de l'app (chargement des données, ereeur, ...)
   infoEtat: string = "";
   infoEtatObservable: string = "";
+  infoErreurId: string = "";
+  infoEtatGraphique: string = "";
 
   idGetDuPays!: number;
 
@@ -52,7 +54,24 @@ export class DetailComponent implements OnInit {
 
   // données pour le graphique 
   tabNbMedailParAnnee: number[] = [];
-  tabAnnéesDeParticipationsAuJO: number[] = [];
+  tabAnnéesDeParticipationsEnString: string[] = [];
+
+
+  // Configuration du graphique line dans le Html
+    typeGraphique: ChartType = "line";
+
+    contenuGraphique: ChartData<"line"> = {
+
+      // noms associés au part du graphique pie
+      labels: [],
+
+      // proportion de chaque part du graphique pour chaque pays
+      datasets: [{
+        data: [],
+        label: "Nombres de médails du pays par années"
+      }]
+    
+    };
 
   // créations de l'observable qui va recuperer tout le contenu des JO
   
@@ -89,17 +108,17 @@ export class DetailComponent implements OnInit {
           if(Number.isInteger(idConversionNumber) && idConversionNumber >= 0){
 
               this.idGetDuPays = idConversionNumber;
+              
             }
             // si l'id existe mais n'est pas number, ou est négatif
             else{
 
-              this.infoEtat = "Erreur, l'id n'est pas un nombre positif";
-              return;
+              this.infoErreurId = "Erreur, l'id n'est pas un nombre positif";
+              
             }
 
         }else{
-          this.infoEtat = "Erreur, l'id du pays n'existe pas";
-          return;
+          this.infoErreurId = "Erreur, l'id du pays n'existe pas";
   
         }
 
@@ -135,14 +154,14 @@ export class DetailComponent implements OnInit {
 
             infoEtatObservable: "",
             nomDuPays: "",
-            nbParticipationsAuJODuPays: 0
-            /*nbTotalDeMedailsDuPays: number;
-            nbTotalAthletesDuPays: number;
+            nbParticipationsAuJODuPays: 0,
+            nbTotalDeMedailsDuPays: 0,
+            nbTotalAthletesDuPays: 0,
 
             // données pour le graphique 
-            tabNbMedailParAnnee: number[];
-            tabAnnéesDeParticipationsAuJO: number[];
-            */
+            tabNbMedailParAnnee: [],
+            tabAnnéesDeParticipationsAuJO: []
+            
 
             
           };
@@ -170,16 +189,38 @@ export class DetailComponent implements OnInit {
 
             this.nomDuPays = paysJO.country;
 
-            let tabAnnéesDeParticipationsAuJO: number[] = [];
+            let tabLesParticipationsDuPays: number[] = [];
+
+            let tabLesMedailsDuPays: number[] = [];
+
+            let tabLesNbAthletesDuPays: number[] = [];
 
             let tabParticipationsDuPays = paysJO.participations;
 
             for(let uneParticipationDuPays of tabParticipationsDuPays){
-              tabAnnéesDeParticipationsAuJO.push(uneParticipationDuPays.year);
+              
+              tabLesParticipationsDuPays.push(uneParticipationDuPays.year);
+              
+              tabLesMedailsDuPays.push(uneParticipationDuPays.medalsCount);
+
+              tabLesNbAthletesDuPays.push(uneParticipationDuPays.athleteCount);
             }
 
-            this.nbParticipationsAuJODuPays = tabAnnéesDeParticipationsAuJO.length;
+            
+           
+            this.tabNbMedailParAnnee = tabLesMedailsDuPays;
 
+            this.nbParticipationsAuJODuPays = tabLesParticipationsDuPays.length;
+
+            this.nbTotalDeMedailsDuPays = tabLesMedailsDuPays.reduce((sommeActuel, valeurAAjouter) => sommeActuel + valeurAAjouter , 0 );
+
+            this.nbTotalAthletesDuPays = tabLesNbAthletesDuPays.reduce((sommeActuel, valeurAAjouter) => sommeActuel + valeurAAjouter , 0 );
+
+            // conversion du tableau des années de participation 
+            // en string[], afin qu'il soit utilisable pour le graphique:
+            this.tabAnnéesDeParticipationsEnString = tabLesParticipationsDuPays.map( (elt) => 
+              elt.toString()
+            ); 
           }
         }
 
@@ -192,15 +233,40 @@ export class DetailComponent implements OnInit {
 
           infoEtatObservable: this.infoEtatObservable,
           nomDuPays: this.nomDuPays,
-          nbParticipationsAuJODuPays: this.nbParticipationsAuJODuPays
-          
+          nbParticipationsAuJODuPays: this.nbParticipationsAuJODuPays,
+          nbTotalDeMedailsDuPays: this.nbTotalDeMedailsDuPays,
+          nbTotalAthletesDuPays: this.nbTotalAthletesDuPays,
+            
+          // données pour le graphique 
+          tabNbMedailParAnnee: this.tabNbMedailParAnnee,
+          tabAnnéesDeParticipationsAuJO: this.tabAnnéesDeParticipationsEnString
+    
+
         };
 
       })
     );
 
     // abonement à l'observable pour l'executer:
-    this.observableInfoJODuPays$.subscribe();
+    this.observableInfoJODuPays$.subscribe((infoDuPays) => {
+     
+      if(infoDuPays){
+
+        this.contenuGraphique = {
+        labels: infoDuPays.tabAnnéesDeParticipationsAuJO,
+
+      // proportion de chaque part du graphique pour chaque pays
+      datasets: [{
+        data: infoDuPays.tabNbMedailParAnnee,
+        label: "Nombres de médails du pays par années"
+      }]
+      }
+
+      this.infoEtatGraphique = "Données bien chargés dans le graphique";
+
+      }
+      
+    });
 
 
     
