@@ -1,0 +1,46 @@
+<div *ngIf="observableInfoJODuPays$ | async as infoPays">
+
+  <p>{{infoEtat}}</p>
+  <p>{{infoPays.infoEtatObservable}}</p>
+  <p>{{infoErreurId}}</p>
+  <p>{{infoEtatGraphique}}</p>
+  <p></p>
+
+  <div *ngIf="resultatRecherche == 'ok'">
+    
+    <h2 class="titreBleu">{{infoPays.nomDuPays}}</h2>
+
+    <div class="conteneurCentredesTitres">
+
+      <div>
+        <strong class="titreEncadreBleu">Nombre de participations : {{infoPays.nbParticipationsAuJODuPays}}</strong>
+      </div>
+
+      <div>
+        <strong class="titreEncadreBleu">Total de médailles : {{ infoPays.nbTotalDeMedailsDuPays }}</strong>
+      </div>
+        
+      <div>
+        <strong class="titreEncadreBleu">Total d'athlètes : {{ infoPays.nbTotalAthletesDuPays }} </strong>
+      </div>
+
+    </div>
+
+    <!-- Graphique ligne -->
+
+    <canvas
+      baseChart
+      [data]="contenuGraphique"
+      [type]="typeGraphique">
+    </canvas>
+      
+    <br><br>
+
+  </div>
+
+    <button routerLink="/">Retour à la page d'accueil</button>
+
+
+  
+
+</div>
