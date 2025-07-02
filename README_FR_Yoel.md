@@ -22,7 +22,7 @@ Cette application permet de :
 
 - `src/app/core/models/Olympic.ts` : Modèle de données pour les JO
 - `src/app/core/services/olympic.service.ts` : Service pour charger les données depuis un fichier JSON
-- `src/app/... : Le dossier qui contient chaque composant Angular de l'application, avec un fichier.ts, un fichier.html, et un fichier.scss
+- `src/app/...` : Le dossier qui contient chaque composant Angular de l'application, avec un fichier.ts, un fichier.html, et un fichier.scss
 - `src/assets/mock/olympic.json` : Données mockées des Jeux Olympiques
 
 ---
