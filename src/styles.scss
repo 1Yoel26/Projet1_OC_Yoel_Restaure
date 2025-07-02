@@ -7,6 +7,36 @@ body {
     
 }
 
+.titreBleu{
+  background-color: #04838f;
+  color: white;
+  padding: 10px;
+  width: max-content;
+  margin: auto;
+  }
+
+.conteneurCentredesTitres{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5em;
+  justify-content: center;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+
+
+.titreEncadreBleu{
+  border: 0.5px solid #04838f;
+  padding: 6px;
+  margin: 10px;
+  width: max-content;
+  
+}
+
+
 @media(min-width: 1024px){
 
   canvas{

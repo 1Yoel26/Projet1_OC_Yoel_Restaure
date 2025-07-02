@@ -9,11 +9,21 @@
 </p>
 
 
-<h2>Medals per Country</h2>
+<h2 class="titreBleu">Medals per Country</h2>
 
 <div *ngIf="observableInfoPratiqueJO$ | async as infoJO">
 
-    <p><strong>Numbers Of JOs {{infoJO.nbDeJo}}</strong>   | <strong>Numbers Of Countrys {{infoJO.nbDePays}} </strong> </p>
+    <div class="conteneurCentredesTitres">
+        <div>
+            <strong class="titreEncadreBleu">Numbers Of JOs {{infoJO.nbDeJo}}</strong>
+        </div>
+        
+        <div>
+            <strong class="titreEncadreBleu">Numbers Of Countrys {{infoJO.nbDePays}} </strong> 
+        </div>
+    
+    </div>
+
 
 
 </div>
