@@ -11,6 +11,11 @@ const routes: Routes = [
   },
 
   {
+    path: 'detail',
+    component: DetailComponent,
+  },
+
+  {
     path: 'detail/:idPays',
     component: DetailComponent,
   },
