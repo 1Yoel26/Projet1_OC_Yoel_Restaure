@@ -232,6 +232,9 @@
     public pluginDataLabel = {
       plugins : {
         datalabels : {
+          font:{
+            size: 14
+          },
           formatter : (_value : number, ctx: Context) => {
             return ctx.chart.data.labels?.[ctx.dataIndex];
           },

@@ -56,6 +56,10 @@ export class DetailComponent implements OnInit {
   tabNbMedailParAnnee: number[] = [];
   tabAnnéesDeParticipationsEnString: string[] = [];
 
+  // variable pour savoir si l'id du pays demandé 
+  // appartient bien à un des pays existant
+  resultatRecherche: string = "";
+
 
   // Configuration du graphique line dans le Html
     typeGraphique: ChartType = "line";
@@ -177,7 +181,7 @@ export class DetailComponent implements OnInit {
         // Verification si l'id du pays existe dans le fichier json
         // avant de recuperer les infos sur ce pays:
 
-        let resultatRecherche: string = "";
+        
 
         for(let paysJO of dataDesJO){
 
@@ -185,7 +189,7 @@ export class DetailComponent implements OnInit {
           // alors récupération de ses données :
           if(paysJO.id == this.idGetDuPays){
             // récuperations de toutes les données utiles ici :
-            resultatRecherche = "ok";
+            this.resultatRecherche = "ok";
 
             this.nomDuPays = paysJO.country;
 
@@ -224,7 +228,7 @@ export class DetailComponent implements OnInit {
           }
         }
 
-        if(resultatRecherche != "ok"){
+        if(this.resultatRecherche != "ok"){
           this.infoEtatObservable = "Erreur, l'id n'appartient pas à un des pays";
         }
         
@@ -250,7 +254,7 @@ export class DetailComponent implements OnInit {
     // abonement à l'observable pour l'executer:
     this.observableInfoJODuPays$.subscribe((infoDuPays) => {
      
-      if(infoDuPays){
+      if(infoDuPays && this.resultatRecherche == "ok"){
 
         this.contenuGraphique = {
         labels: infoDuPays.tabAnnéesDeParticipationsAuJO,
