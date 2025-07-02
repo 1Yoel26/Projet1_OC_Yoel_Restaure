@@ -1,63 +1,67 @@
 
-# 🏅 Olympic Games Dashboard - Angular Application
+# 🏅 JO Dashboard - Application Angular Jeux Olympiques
 
-An Angular application that presents data about the Olympic Games, with dynamic visualizations using `ng2-charts` and `chart.js`.
+Une application Angular qui présente des données sur les Jeux Olympiques, avec des visualisations graphiques dynamiques utilisant `ng2-charts` et `chart.js`.
 
 ---
 
 ## 📋 Description
 
-This application allows you to:
+Cette application permet de :
 
-- Display the list of countries participating in the Olympic Games  
-- Visualize the total number of medals won by each country via a pie chart  
-- Show detailed participation information for each country on a dedicated page  
-- Easily navigate between countries through the interactive chart  
-- Track the total number of Olympic Games and the number of participating countries  
-- Provide a simple, modern, and responsive interface  
-
----
-
-## 🗂️ Main Structure
-
-- `src/app/core/models/Olympic.ts`: Data model for the Olympics  
-- `src/app/core/services/olympic.service.ts`: Service to load data from a JSON file  
-- `src/app/...`: The folder containing each Angular component of the application, with a `.ts`, `.html`, and `.scss` file  
-- `src/assets/mock/olympic.json`: Mock data of the Olympic Games  
+- Afficher la liste des pays participants aux Jeux Olympiques
+- Visualiser le nombre total de médailles remportées par chaque pays via un graphique en camembert (`pie chart`)
+- Afficher les détails des participations aux Jeux pour chaque pays via une page dédiée
+- Naviguer facilement entre les pays à travers le graphique interactif
+- Suivre le nombre total de Jeux Olympiques et le nombre de pays participants
+- Offrir une interface simple, moderne et responsive
 
 ---
 
-## 🚀 Installation and Launch
+## 🗂️ Structure principale
+
+- `src/app/core/models/Olympic.ts` : Modèle de données pour les JO
+- `src/app/core/services/olympic.service.ts` : Service pour charger les données depuis un fichier JSON
+- `src/app/...` : Le dossier qui contient chaque composant Angular de l'application, avec un fichier.ts, un fichier.html, et un fichier.scss
+- `src/assets/mock/olympic.json` : Données mockées des Jeux Olympiques
+
+---
+
+## 🚀 Installation et lancement
 
 ```bash
 git clone <https://github.com/1Yoel26/Projet1_OC_Yoel_Restaure>
-cd Your_Path/Projet1_OC_Yoel_Restaure
+cd Votre_Chemin/Projet1_OC_Yoel_Restaure
 npm install
 ng serve
 ```
 
-Then open [http://localhost:4200](http://localhost:4200) in your browser.
+Ouvrez ensuite [http://localhost:4200](http://localhost:4200) dans votre navigateur.
 
 ---
 
-## ⚙️ Key Features
+## ⚙️ Fonctionnalités clés
 
-- Data loading via an Angular service with Observable  
-- Dynamic calculation of the number of Olympic Games, countries, and total medals per country  
-- Display of a pie chart with medals per country (using `chart.js` + the `chartjs-plugin-datalabels` plugin)  
-- User interaction: click on a pie slice to access the detail page of the corresponding country  
-- Status message to indicate if data is loaded or if there is an error  
-- Simple interface with title, introduction, and key data at the top of the page  
+- Chargement des données via un service Angular avec Observable
+- Calcul dynamique du nombre de JO, des pays, et du total de médailles par pays
+- Affichage d'un graphique pie avec les médailles par pays (utilisation de `chart.js` + plugin `chartjs-plugin-datalabels`)
+- Interaction utilisateur : clic sur une part du graphique pour accéder à la page détail du pays correspondant
+- Message d’état pour indiquer si les données sont chargées ou en erreur
+- Interface simple avec titre, introduction et données clés en haut de la page
 
----
-
-## 📚 Technologies Used
-
-- Angular v16+  
-- RxJS for reactive data management  
-- Chart.js v4+ and ng2-charts for charts  
-- chartjs-plugin-datalabels to display labels on charts  
 
 ---
 
-Thank you for using the Olympic Games Dashboard application!  
+## 📚 Technologies utilisées
+
+- Angular v16+
+- RxJS pour la gestion des données réactives
+- Chart.js v4+ et ng2-charts pour les graphiques
+- chartjs-plugin-datalabels pour afficher les labels sur les graphiques
+
+
+---
+
+Merci d’avoir utilisé l'application JO Dashboard !  
+
+---
