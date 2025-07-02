@@ -6,26 +6,7 @@ import { Olympic } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartOptions, ChartType, ChartDataset, ChartData } from 'chart.js';
-
-// cette interface va servir à définir le type de mon observable
-interface infoUtileJODuPays{
-
-   
-  
-  // données des JO sur le pays, à afficher sur la page detail
-  infoEtatObservable: string;
-  nomDuPays: string;
-  nbParticipationsAuJODuPays: number;
-  nbTotalDeMedailsDuPays: number;
-  nbTotalAthletesDuPays: number;
-
-  // données pour le graphique 
-  tabNbMedailParAnnee: number[];
-  tabAnnéesDeParticipationsAuJO: string[];
-  
-
-
-}
+import { InfoUtileJODuPays } from 'src/app/core/models/InfoUtileJODuPays';
 
 
 @Component({
@@ -85,7 +66,7 @@ export class DetailComponent implements OnInit {
   // créations de l'observable qui va calculer et renvoyer toute les
   // données utiles pour la page detail, sur le pays demandé dans l'url
 
-  observableInfoJODuPays$!: Observable<infoUtileJODuPays | null>;
+  observableInfoJODuPays$!: Observable<InfoUtileJODuPays | null>;
   
 
 
