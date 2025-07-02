@@ -11,7 +11,6 @@ example of an olympic country:
 import { Participation } from "./Participation";
 
 
-
 export interface Olympic {
 
     id: number;

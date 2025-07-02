@@ -6,19 +6,12 @@
   import { Router } from '@angular/router';
   import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
   import { BehaviorSubject, map, Observable } from 'rxjs';
+import { StatistiquesJO } from 'src/app/core/models/StatistiquesJO';
 
   // enregistrement du plugin pour afficher les nom des pays 
   // directement sur les parts du graphique
   Chart.register(ChartDataLabels);
 
-  // création de l'interface qui va contenir toutes les données que 
-  // j'ai besoin afin, de typer mon observable 
-    interface statistiquesJO{
-        nbDeJo: number;
-        tabNomDesPays: string[];
-        nbDePays: number;
-        tabNbTotalDeMedaillesParPays: number[];
-    }
 
 
   @Component({
@@ -35,7 +28,7 @@
     // création de l'observable qui va reçevoir toutes les données des JO
     observableContenuJO$!: Observable<Olympic[] | null>;
 
-    observableInfoPratiqueJO$!: Observable<statistiquesJO | null>;
+    observableInfoPratiqueJO$!: Observable<StatistiquesJO | null>;
 
     // création du constructeur pour injecter automatiquement 
     // le service OlympicService
@@ -121,7 +114,6 @@
             nbJo = tabToutesLesAnneesUnique.length;
 
 
-
             // programme 2 pour récuperer dynamiquement la liste 
             // de tous les pays, et le nombre total de pays :
 
@@ -170,7 +162,6 @@
               nbDePays: nbPays,
               tabNbTotalDeMedaillesParPays: tabNbTotalDeMedaillesParPays
             };
-
           }
         )
       ); // fin de l'observable observableInfoPratiqueJO
@@ -184,19 +175,9 @@
           this.contenuGraphique = {
           labels: infoPratiqueJO.tabNomDesPays,
           datasets: [{data: infoPratiqueJO.tabNbTotalDeMedaillesParPays}]
-        
         };
-
-
-        
-
-        }
-        
-        
+        }  
       });
-
-
-
     }
 
     // ajout de l'évènement clique sur le graphique pour
@@ -242,7 +223,4 @@
         }
       }
     };
-
-    
-
      }
