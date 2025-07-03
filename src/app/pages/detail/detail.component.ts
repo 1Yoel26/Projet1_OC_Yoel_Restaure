@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { map, Observable, take } from 'rxjs';
+import { map, Observable, Subscription, take } from 'rxjs';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { OlympicService } from 'src/app/core/services/olympic.service';
 import { NgChartsModule } from 'ng2-charts';
@@ -17,7 +17,7 @@ import { InfoUtileJODuPays } from 'src/app/core/models/InfoUtileJODuPays';
   styleUrl: './detail.component.scss'
 })
 
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, OnDestroy {
 
   // cette variable sert à afficher l'état de l'app (chargement des données, ereeur, ...)
   infoEtat: string = "";
@@ -68,7 +68,9 @@ export class DetailComponent implements OnInit {
 
   observableInfoJODuPays$!: Observable<InfoUtileJODuPays | null>;
   
-
+  // création d'une variable qui va contenir tous les subscribtions 
+  // des observables, afin de pouvoir les détruire facilement.  
+  toutesLesSubscribtions: Subscription = new Subscription();
 
 
   constructor(
@@ -110,7 +112,7 @@ export class DetailComponent implements OnInit {
 
     // tentative de chargement des données dans l'observable :
 
-    this.serviceOlympic.loadInitialData().subscribe({
+    const sub1: Subscription = this.serviceOlympic.loadInitialData().subscribe({
       next: () => {
         this.infoEtat = "Chargement des données";
         this.infoEtat = "";
@@ -233,7 +235,7 @@ export class DetailComponent implements OnInit {
     );
 
     // abonement à l'observable pour l'executer:
-    this.observableInfoJODuPays$.subscribe((infoDuPays) => {
+    const sub2: Subscription = this.observableInfoJODuPays$.subscribe((infoDuPays) => {
      
       if(infoDuPays && this.resultatRecherche == "ok"){
 
@@ -255,6 +257,11 @@ export class DetailComponent implements OnInit {
 
 
     
+  }
+
+  // implementation de ngOnDestroy pour détruire les observables.subscribe:
+  ngOnDestroy(): void {
+    this.toutesLesSubscribtions.unsubscribe();
   }
 
 }

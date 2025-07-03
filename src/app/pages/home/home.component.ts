@@ -1,11 +1,11 @@
-  import { Component, OnInit } from '@angular/core';
+  import { Component, OnDestroy, OnInit } from '@angular/core';
   import { ActiveElement, ChartData, ChartEvent, ChartType, elements, plugins } from 'chart.js';
   import { OlympicService } from 'src/app/core/services/olympic.service';
   import { Olympic } from 'src/app/core/models/Olympic';
   import { Chart } from 'chart.js';
   import { Router } from '@angular/router';
   import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
-  import { BehaviorSubject, map, Observable } from 'rxjs';
+  import { BehaviorSubject, map, Observable, Subscription } from 'rxjs';
 import { StatistiquesJO } from 'src/app/core/models/StatistiquesJO';
 
   // enregistrement du plugin pour afficher les nom des pays 
@@ -20,7 +20,7 @@ import { StatistiquesJO } from 'src/app/core/models/StatistiquesJO';
     styleUrls: ['./home.component.scss'],
   })
 
-  export class HomeComponent implements OnInit {
+  export class HomeComponent implements OnInit, OnDestroy {
 
 
     infoEtat: string = "";
@@ -29,6 +29,10 @@ import { StatistiquesJO } from 'src/app/core/models/StatistiquesJO';
     observableContenuJO$!: Observable<Olympic[] | null>;
 
     observableInfoPratiqueJO$!: Observable<StatistiquesJO | null>;
+
+    // création d'une variable qui va contenir tous les subscribtions 
+    // des observables, afin de pouvoir les détruire facilement.
+    toutesLesSubscribes: Subscription = new Subscription();
 
     // création du constructeur pour injecter automatiquement 
     // le service OlympicService
@@ -55,7 +59,7 @@ import { StatistiquesJO } from 'src/app/core/models/StatistiquesJO';
     ngOnInit(): void {
 
       // appel de la fonction load pour charger les données dans l'Observable
-      this.serviceOlympic.loadInitialData().subscribe({
+      const sub1: Subscription = this.serviceOlympic.loadInitialData().subscribe({
 
         next: () => {
           this.infoEtat = "";
@@ -68,6 +72,9 @@ import { StatistiquesJO } from 'src/app/core/models/StatistiquesJO';
           return;
         }
       });
+
+      // ajout de la première subscribtion
+      this.toutesLesSubscribes.add(sub1);
       
 
       // appel de la fonction get pour recuperer l'observable du service avec 
@@ -167,7 +174,7 @@ import { StatistiquesJO } from 'src/app/core/models/StatistiquesJO';
       ); // fin de l'observable observableInfoPratiqueJO
 
       // test si l'observable affiche qq chose
-      this.observableInfoPratiqueJO$.subscribe((infoPratiqueJO)=> {
+      const sub2: Subscription = this.observableInfoPratiqueJO$.subscribe((infoPratiqueJO)=> {
 
         // si cette observable contient bien des données :
         if(infoPratiqueJO){
@@ -178,6 +185,10 @@ import { StatistiquesJO } from 'src/app/core/models/StatistiquesJO';
         };
         }  
       });
+
+      // ajout de la 2em subscribtion
+      this.toutesLesSubscribes.add(sub2);
+
     }
 
     // ajout de l'évènement clique sur le graphique pour
@@ -223,4 +234,10 @@ import { StatistiquesJO } from 'src/app/core/models/StatistiquesJO';
         }
       }
     };
+
+
+    // implementation de ngOnDestroy pour détruire les observables.subscribe
+    ngOnDestroy(): void {
+      this.toutesLesSubscribes.unsubscribe();
+    }
      }
