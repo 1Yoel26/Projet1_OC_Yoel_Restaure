@@ -13,7 +13,6 @@
   Chart.register(ChartDataLabels);
 
 
-
   @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
