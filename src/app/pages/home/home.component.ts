@@ -6,7 +6,7 @@
   import { Router } from '@angular/router';
   import ChartDataLabels, { Context } from 'chartjs-plugin-datalabels';
   import { BehaviorSubject, map, Observable, Subscription } from 'rxjs';
-import { StatistiquesJO } from 'src/app/core/models/StatistiquesJO';
+  import { StatistiquesJO } from 'src/app/core/models/StatistiquesJO';
 
   // enregistrement du plugin pour afficher les nom des pays 
   // directement sur les parts du graphique
@@ -47,10 +47,10 @@ import { StatistiquesJO } from 'src/app/core/models/StatistiquesJO';
     contenuGraphique: ChartData<"pie"> = {
 
       // noms associés au part du graphique pie
-      labels: ["fr", "AN"],
+      labels: [],
 
       // proportion de chaque part du graphique pour chaque pays
-      datasets: [{data: [10, 90]}]
+      datasets: [{data: []}]
     
     };
 
@@ -241,3 +241,4 @@ import { StatistiquesJO } from 'src/app/core/models/StatistiquesJO';
       this.toutesLesSubscribes.unsubscribe();
     }
      }
+
